@@ -1,5 +1,6 @@
 package cloud.matheusdcunha.gerenciamento_projetos.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -35,4 +37,8 @@ public class Project {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @OneToMany(mappedBy = "project")
+    @JsonIgnore
+    private Set<Task> tasks;
 }

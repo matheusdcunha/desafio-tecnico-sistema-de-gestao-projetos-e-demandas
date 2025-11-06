@@ -18,11 +18,9 @@ String title,
 String description,
 
 @NotNull(message = "Task must have a status")
-@Enumerated(EnumType.STRING)
 TaskStatus status,
 
 @NotNull(message = "Task must have a priority")
-@Enumerated(EnumType.STRING)
 TaskPriority priority,
 LocalDate dueDate,
 Long projectId

@@ -27,8 +27,13 @@ public class TaskService {
 
     public TaskResponseDTO create(TaskRequestDTO taskRequestDTO) {
 
-        Project project = projectRepository.findById(taskRequestDTO.projectId())
-                .orElseThrow(() -> new EntityNotFoundException("Project not found with ID: " + taskRequestDTO.projectId()));
+        Long projectId = taskRequestDTO.projectId();
+
+        if (!projectRepository.existsById(projectId)) {
+            throw new EntityNotFoundException("Project not found with ID: " + projectId);
+        }
+
+        Project project = projectRepository.getReferenceById(projectId);
 
         Task task = taskMapper.toEntity(taskRequestDTO, project);
 
@@ -46,6 +51,12 @@ public class TaskService {
 
         Task taskUpdated = taskRepository.save(task);
         return taskMapper.toResponseDTO(taskUpdated);
+    }
+
+    public void deleteById(long id) {
+
+        taskRepository.deleteById(id);
+
     }
 
 }

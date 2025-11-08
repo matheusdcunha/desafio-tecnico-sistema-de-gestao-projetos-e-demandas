@@ -1,15 +1,21 @@
 package cloud.matheusdcunha.gerenciamento_projetos.service;
 
+import cloud.matheusdcunha.gerenciamento_projetos.criteria.TaskFilterCriteria;
 import cloud.matheusdcunha.gerenciamento_projetos.domain.Project;
 import cloud.matheusdcunha.gerenciamento_projetos.domain.Task;
+import cloud.matheusdcunha.gerenciamento_projetos.domain.enums.TaskPriority;
+import cloud.matheusdcunha.gerenciamento_projetos.domain.enums.TaskStatus;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskRequestDTO;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskRequestStatusUpdateDTO;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskResponseDTO;
 import cloud.matheusdcunha.gerenciamento_projetos.mapper.TaskMapper;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.ProjectRepository;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.TaskRepository;
+import cloud.matheusdcunha.gerenciamento_projetos.specification.TaskSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TaskService {
@@ -23,7 +29,6 @@ public class TaskService {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
     }
-
 
     public TaskResponseDTO create(TaskRequestDTO taskRequestDTO) {
 
@@ -42,7 +47,7 @@ public class TaskService {
         return taskMapper.toResponseDTO(taskCreated);
     }
 
-    public TaskResponseDTO updateStatus(long id, TaskRequestStatusUpdateDTO taskRequestStatusUpdateDTO) {
+    public TaskResponseDTO updateStatus(Long id, TaskRequestStatusUpdateDTO taskRequestStatusUpdateDTO) {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with ID: " + id));
@@ -56,6 +61,14 @@ public class TaskService {
     public void deleteById(long id) {
 
         taskRepository.deleteById(id);
+
+    }
+
+    public List<TaskResponseDTO> findAll(TaskFilterCriteria criteria){
+
+        List<Task> tasksEntity = taskRepository.findAll(TaskSpecification.build(criteria));
+
+        return tasksEntity.stream().map(taskMapper::toResponseDTO).toList();
 
     }
 

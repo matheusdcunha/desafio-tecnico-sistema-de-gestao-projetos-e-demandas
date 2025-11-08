@@ -7,7 +7,6 @@ import cloud.matheusdcunha.gerenciamento_projetos.mapper.ProjectMapper;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

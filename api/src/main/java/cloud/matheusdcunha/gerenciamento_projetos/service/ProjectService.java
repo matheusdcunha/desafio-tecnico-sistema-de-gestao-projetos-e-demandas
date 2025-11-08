@@ -23,14 +23,17 @@ public class ProjectService {
     public List<ProjectResponseDTO> findAll() {
 
         List<Project> projects = projectRepository.findAll();
-        List<ProjectResponseDTO> projectResponseDTOS = projects.stream().map(projectMapper::toResponseDTO).toList();
 
-        return projectResponseDTOS;
+        return projects.stream().map(projectMapper::toResponseDTO).toList();
     }
 
     public ProjectResponseDTO create(ProjectRequestDTO projectRequestDTO) {
         Project project = projectMapper.toEntity(projectRequestDTO);
 
         return projectMapper.toResponseDTO(projectRepository.save(project));
+    }
+
+    public void delete(Long id) {
+        projectRepository.deleteById(id);
     }
 }

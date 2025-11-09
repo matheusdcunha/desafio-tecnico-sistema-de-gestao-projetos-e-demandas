@@ -3,16 +3,15 @@ package cloud.matheusdcunha.gerenciamento_projetos.service;
 import cloud.matheusdcunha.gerenciamento_projetos.criteria.TaskFilterCriteria;
 import cloud.matheusdcunha.gerenciamento_projetos.domain.Project;
 import cloud.matheusdcunha.gerenciamento_projetos.domain.Task;
-import cloud.matheusdcunha.gerenciamento_projetos.domain.enums.TaskPriority;
-import cloud.matheusdcunha.gerenciamento_projetos.domain.enums.TaskStatus;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskRequestDTO;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskRequestStatusUpdateDTO;
 import cloud.matheusdcunha.gerenciamento_projetos.dto.TaskResponseDTO;
+import cloud.matheusdcunha.gerenciamento_projetos.exceptions.ProjectNotFoundException;
+import cloud.matheusdcunha.gerenciamento_projetos.exceptions.TaskNotFoundException;
 import cloud.matheusdcunha.gerenciamento_projetos.mapper.TaskMapper;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.ProjectRepository;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.TaskRepository;
 import cloud.matheusdcunha.gerenciamento_projetos.specification.TaskSpecification;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +19,9 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    final TaskRepository taskRepository;
-    final ProjectRepository projectRepository;
-    final TaskMapper taskMapper;
+    private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
+    private final TaskMapper taskMapper;
 
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository, TaskMapper taskMapper) {
         this.taskMapper = taskMapper;
@@ -35,7 +34,7 @@ public class TaskService {
         Long projectId = taskRequestDTO.projectId();
 
         if (!projectRepository.existsById(projectId)) {
-            throw new EntityNotFoundException("Project not found with ID: " + projectId);
+            throw new ProjectNotFoundException("Project not found with ID: " + projectId);
         }
 
         Project project = projectRepository.getReferenceById(projectId);
@@ -50,7 +49,7 @@ public class TaskService {
     public TaskResponseDTO updateStatus(Long id, TaskRequestStatusUpdateDTO taskRequestStatusUpdateDTO) {
 
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found with ID: " + id));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with ID: " + id));
 
         task.setStatus(taskRequestStatusUpdateDTO.status());
 
@@ -69,7 +68,6 @@ public class TaskService {
         List<Task> tasksEntity = taskRepository.findAll(TaskSpecification.build(criteria));
 
         return tasksEntity.stream().map(taskMapper::toResponseDTO).toList();
-
     }
 
 }

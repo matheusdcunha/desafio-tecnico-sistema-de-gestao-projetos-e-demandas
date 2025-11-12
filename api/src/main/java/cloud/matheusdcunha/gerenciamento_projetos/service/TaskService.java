@@ -12,6 +12,8 @@ import cloud.matheusdcunha.gerenciamento_projetos.mapper.TaskMapper;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.ProjectRepository;
 import cloud.matheusdcunha.gerenciamento_projetos.repository.TaskRepository;
 import cloud.matheusdcunha.gerenciamento_projetos.specification.TaskSpecification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
     private final TaskMapper taskMapper;
+    private Logger logger = LoggerFactory.getLogger(TaskService.class.getName());
 
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository, TaskMapper taskMapper) {
         this.taskMapper = taskMapper;

@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: gerenciamento_projetos
+
+  datasource:
+    # Formato: jdbc:postgresql://<host>:<port>/<nome_do_banco>
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
+    # Usuário do banco de dados
+    username: ${DB_USER}
+    # Senha do banco de dados
+    password: ${DB_PASSWORD}
+    # Drive
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # CONFIGURAÇÃO DO JPA/HIBERNATE
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  web:
+    resources:
+      ## Configuração para rotas
+      add-mappings: false
+
+  logging:
+    level:
+      cloud.matheusdcunha.gerenciamento_projetos: DEBUG
